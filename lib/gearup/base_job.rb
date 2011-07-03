@@ -3,7 +3,12 @@ module Gearup
     include EM::Deferrable
     def do_job(*args)
       # Log?
-      run(*args)
+      begin
+        run(*args)
+      rescue ArgumentError
+        fail("BOO")
+        Logger.log("Wrong number of arguments for #{self.class.name} run method")
+      end
     end
 
     def run

@@ -6,7 +6,7 @@ module Gearup
     @@jobs = EM::Queue.new
 
     def post_init
-      puts "GOT WORKER!"
+      Logger.log("Got Worker")
       @@workers[self] = 0
       @@stomp = EM.connect 'localhost', 61613, Gearup::StompClient unless @@stomp
     end

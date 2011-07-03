@@ -16,7 +16,7 @@ exit unless File.directory? job_dir
 
 worker_pids = []
 master_pid = nil
-master_sock = "/tmp/master.sock#{Process.pid}"
+master_sock = "/tmp/gearup.sock#{Process.pid}"
 
 #trap("SIGINT"){Process.kill("SIGKILL", *pids); exit!}
 

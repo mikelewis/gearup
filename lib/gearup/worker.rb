@@ -54,7 +54,12 @@ module Gearup
       klass = begin
                 Kernel.const_get(class_name)
               rescue NameError
-                load_class_from_file(name, class_name) rescue nil
+                begin
+                  load_class_from_file(name, class_name) 
+                rescue => e
+                  Logger.log(e.message, :error)
+                  nil
+                end
               end
     end
 
@@ -65,7 +70,6 @@ module Gearup
         location = "#{@job_dir}/#{name}"
         require location
       rescue LoadError => e
-        puts "Can't find a job named #{name} at #{location}"
         fail "Can't find a job named #{name} at #{location}"
       end
 

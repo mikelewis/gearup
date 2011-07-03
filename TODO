@@ -1,0 +1,7 @@
+- Status checks that client can query and worker can update. This means jobid... just use messageid? Yeaa. 
+  - Set expiration time. How long? 1 day sounds good for those long jobs :)
+  - Nice interface for worker. update_status :running, :update_status checking_mail, :update_status pinging. This means job needs messageid/jobid. (USE EM-REDIS :})
+    - Needs a redis server to be up and running (set in config). If it's not running, no big deal.. just can't use status checks.
+  - Always set init and end job by us (working, completed)
+- Do CommandCenter (TCP interface?)
+- Add configuration for queue name, #workers(config.yml)

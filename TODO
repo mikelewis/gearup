@@ -5,4 +5,7 @@
   - Always set init and end job by us (working, completed)
   - Should client create a ticket id if he/she wants to track it? Yea, that's not a bad idea. Or better yet, we create one for them and they can use it if they want. Yea that's good. Client.{job}("arg1") returns a job_id that they can later ping.
 - Do CommandCenter (TCP interface?)
+  -Add/remove workers via interface
 - Add configuration for queue name, #workers(config.yml)
+- Run CommandCenter.start(ARGS) from bin/gearup
+- Then everything will exist within the CommandCenter module/class (keeping track of master/workers etc)

@@ -4,21 +4,30 @@ $:.unshift File.dirname(__FILE__) + '/../lib'
 
 require 'gearup'
 
-exit unless ARGV.size == 2
-exit unless ARGV[0] =~ /^[-+]?[0-9]+$/
 
-num_workers = ARGV[0].to_i
-unless num_workers > 0
-  puts "Need to enter more than one worker"
-  exit
-end
+opts = Trollop::options do
+  version "Gearup (c) 2011 Mike Lewis"
+  banner <<-EOS
+Gearup Server
 
-job_dir = File.expand_path ARGV[1]
-unless File.directory? job_dir
-  puts 'Need to enter a valid job directory'
-  exit
+Usage:
+       prependfile [options]
+
+where [options] are:
+  EOS
+
+  opt :config, "Configuration file", :type => String
+  #TODO
+  opt :workers, "Number of Master Consumers", :default => 1
 end
+Trollop::die :config, "must supply a configuration file" unless opts[:config]
+Trollop::die :config, "must exist" unless File.exist?(opts[:config])
+
+Gearup::CONFIG.merge!(SimpleConf.load(opts[:config]))
+
+p Gearup::CONFIG.job_dir
+
+p opts
 
 # run in Daemon???
-# Use proper command line
-Gearup::CommandCenter.start(num_workers, job_dir)
+Gearup::CommandCenter.start

@@ -5,6 +5,7 @@ module Gearup
   require 'logger'
   require 'stomp'
   require 'simpleconf'
+  require 'trollop'
 
   # Your code goes here...
   require 'gearup/logger'
@@ -26,6 +27,8 @@ module Gearup
     }
 
     log_file "log/gearup.log"
+    job_dir "test_jobs"
+    num_workers 1
   }
 
   Logger.set_logger(::Logger.new(CONFIG.log_file, 'daily'))

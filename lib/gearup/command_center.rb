@@ -5,7 +5,9 @@ module Gearup
     end
 
     class << self
-      def start(num_workers, job_dir)
+      def start
+        num_workers = CONFIG.num_workers
+        job_dir = CONFIG.job_dir
 
         worker_pids = []
         master_pid = nil

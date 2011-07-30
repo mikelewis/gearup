@@ -8,7 +8,7 @@ module Gearup
     def post_init
       Logger.log("Got Worker")
       @@workers[self] = 0
-      @@stomp = EM.connect 'localhost', 61613, Gearup::StompClient unless @@stomp
+      @@stomp = EM.connect CONFIG.queue.server, CONFIG.queue.port, StompClient unless @@stomp
     end
 
     def serializer

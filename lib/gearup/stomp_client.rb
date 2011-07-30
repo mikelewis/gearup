@@ -14,7 +14,7 @@ module Gearup
     def receive_msg(msg)
       if msg.command == "CONNECTED"
         Logger.log("Stomp client connected")
-        subscribe '/queue/test', :ack => 'client-individual', "activemq.prefetchSize" => 100
+        subscribe CONFIG.queue.name, :ack => 'client-individual', "activemq.prefetchSize" => CONFIG.queue.prefetch_size
       elsif msg.command == "MESSAGE"
         Master.receive_msg(msg)
       end

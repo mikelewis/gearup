@@ -6,8 +6,8 @@ Gem::Specification.new do |s|
   s.name        = "gearup"
   s.version     = Gearup::VERSION
   s.platform    = Gem::Platform::RUBY
-  s.authors     = ["TODO: Write your name"]
-  s.email       = ["TODO: Write your email address"]
+  s.authors     = ["Mike Lewis"]
+  s.email       = ["ft.mikelewis@gmail.com"]
   s.homepage    = ""
   s.summary     = %q{TODO: Write a gem summary}
   s.description = %q{TODO: Write a gem description}
@@ -20,7 +20,7 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
 
   #run time
-  ['eventmachine'].each do |runtime|
+  ['eventmachine', 'simpleconf'].each do |runtime|
     s.add_runtime_dependency runtime
   end
 

@@ -8,34 +8,17 @@ exit unless ARGV.size == 2
 exit unless ARGV[0] =~ /^[-+]?[0-9]+$/
 
 num_workers = ARGV[0].to_i
-exit unless num_workers > 0
+unless num_workers > 0
+  puts "Need to enter more than one worker"
+  exit
+end
 
 job_dir = File.expand_path ARGV[1]
-exit unless File.directory? job_dir
-
-
-worker_pids = []
-master_pid = nil
-master_sock = "/tmp/gearup.sock#{Process.pid}"
-
-#trap("SIGINT"){Process.kill("SIGKILL", *pids); exit!}
-
-master_pid = Kernel.fork do
-  EM.run do
-    EM.start_server master_sock, Gearup::Master
-    sleep 0.5 #wait for workers to join
-  end
-
+unless File.directory? job_dir
+  puts 'Need to enter a valid job directory'
+  exit
 end
 
-#let master setup
-sleep 0.5
-num_workers.to_i.times do
-  worker_pids << EM.fork_reactor do
-    EM.connect master_sock, Gearup::Worker, job_dir
-  end
-end
-
-EM.run do
-  EM.start_server '0.0.0.0', 10053, Gearup::CommandCenter, worker_pids, master_pid
-end
+# run in Daemon???
+# Use proper command line
+Gearup::CommandCenter.start(num_workers, job_dir)

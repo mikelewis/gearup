@@ -4,6 +4,7 @@ module Gearup
     #    @@queue = EM::Queue.new
 
     def initialize(job_dir)
+      Logger.log("Init Worker")
       @job_dir = job_dir
       @queue = EM::Queue.new
     end
@@ -13,12 +14,7 @@ module Gearup
     end
 
     def finish_job(job, status = :success)
-      if status == :success
-        puts "SUCCESS"
-      else
-        puts "FAILURE"
-      end
-
+      #log status maybe ?
       send_object(:type=>'finished_job', :message_id=>job['message_id'])
     end
 

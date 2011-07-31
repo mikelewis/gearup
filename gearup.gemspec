@@ -20,7 +20,7 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
 
   #run time
-  ['eventmachine', 'simpleconf', 'trollop'].each do |runtime|
+  ['eventmachine', 'simpleconf', 'trollop', 'daemons', 'logger'].each do |runtime|
     s.add_runtime_dependency runtime
   end
 

@@ -20,14 +20,21 @@ where [options] are:
   #TODO
   opt :workers, "Number of Master Consumers", :default => 1
 end
-Trollop::die :config, "must supply a configuration file" unless opts[:config]
-Trollop::die :config, "must exist" unless File.exist?(opts[:config])
 
-Gearup::CONFIG.merge!(SimpleConf.load(opts[:config]))
+unless ["stop", "status"].include?(ARGV[0])
+  Trollop::die :config, "must supply a configuration file" unless opts[:config]
+  Trollop::die :config, "file must exist" unless File.exist?(opts[:config])
 
-p Gearup::CONFIG.job_dir
+  Gearup::CONFIG.merge!(SimpleConf.load(opts[:config]))
+end
 
-p opts
+shutdown_proc = Proc.new do
+  Gearup::CommandCenter.shutdown
+end
 
-# run in Daemon???
-Gearup::CommandCenter.start
+opts[:workers].times do
+Daemons.run_proc('gearup', :dir => Gearup::PID_DIR, :dir_mode => :normal , :multiple =>true, :log_output => false, :stop_proc => shutdown_proc) do
+  Dir.chdir(Gearup::GEARUP_DIR)
+  Gearup::CommandCenter.start
+end
+end

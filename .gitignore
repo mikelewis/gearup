@@ -5,3 +5,4 @@ pkg/*
 test_jobs/*
 enqueue.rb
 *.log
+tmp/pids/*

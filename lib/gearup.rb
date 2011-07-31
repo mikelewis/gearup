@@ -2,13 +2,18 @@ module Gearup
   require 'eventmachine'
   require 'set'
   require 'json'
-  require 'logger'
   require 'stomp'
   require 'simpleconf'
   require 'trollop'
+  gem "logger"
+  require "logger"
+  require 'daemons'
 
-  # Your code goes here...
   require 'gearup/logger'
+
+  GEARUP_DIR = File.expand_path(File.dirname(__FILE__) + "/..")
+  
+  PID_DIR = File.join(GEARUP_DIR, 'tmp', 'pids')
 
 
   CONFIG = SimpleConf {

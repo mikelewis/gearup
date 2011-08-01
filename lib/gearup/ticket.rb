@@ -16,7 +16,9 @@ module Gearup
       end
 
       def aupdate_ticket(ticket_num, status)
-        aredis.set(ticket_key(ticket_num), status)
+        aredis.set(ticket_key(ticket_num), status) do |val|
+          yield
+        end
       end
 
       def incr_ticket_count

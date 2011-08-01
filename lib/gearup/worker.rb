@@ -14,15 +14,18 @@ module Gearup
     end
 
     def finish_job(job, status = :success)
+      p = Proc.new do
+        send_object(:type=>'finished_job', :message_id=>job['message_id'])
+      end
       if job["ticket"]
         if status == :success
-          Ticket.update_ticket(job["ticket"], TICKET_STATUS[:success])
+          Ticket.aupdate_ticket(job["ticket"], TICKET_STATUS[:success], &p)
         else
-          Ticket.update_ticket(job["ticket"], TICKET_STATUS[:failed])
+          Ticket.aupdate_ticket(job["ticket"], TICKET_STATUS[:failed], &p)
         end
+      else
+        p.call
       end
-
-        send_object(:type=>'finished_job', :message_id=>job['message_id'])
     end
 
     def receive_object(job)
@@ -46,11 +49,16 @@ module Gearup
               finish_job(job, :fail)
             }
 
-            if job["ticket"]
-              Ticket.update_ticket(job["ticket"], TICKET_STATUS[:processing])
-              Logger.log("Working on #{job["ticket"]}")
+            do_work_proc = Proc.new do
+              klass_obj.do_job(*job['args'])
+              Logger.log("Working on #{job["ticket"]}") if job["ticket"]
             end
-            klass_obj.do_job(*job['args'])
+
+            if job["ticket"]
+              Ticket.aupdate_ticket(job["ticket"], TICKET_STATUS[:processing], &do_work_proc)
+            else
+              do_work_proc.call
+            end
           end
         end
       end

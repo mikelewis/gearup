@@ -14,8 +14,12 @@ module Gearup
       end
     end
 
-    def update_ticket_status(status)
-      Ticket.update_ticket(@job["ticket"], status) if @job["ticket"]
+    def update_ticket_status(status, &blk)
+      if block_given? #async
+        Ticket.aupdate_ticket(@job["ticket"], status, &blk) if @job["ticket"]
+      else
+        Ticket.update_ticket(@job["ticket"], status) if @job["ticket"]
+      end
     end
 
     def run

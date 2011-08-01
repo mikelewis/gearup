@@ -1,6 +1,6 @@
 module Gearup
   require 'eventmachine'
-  #require 'em-redis'
+  require 'em-redis'
   require 'redis'
   require 'set'
   require 'json'

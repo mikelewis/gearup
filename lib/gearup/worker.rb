@@ -16,9 +16,9 @@ module Gearup
     def finish_job(job, status = :success)
       if job["ticket"]
         if status == :success
-          Ticket.update_ticket(job["ticket"], TICKET_STATUS[:success])
+          Ticket.aupdate_ticket(job["ticket"], TICKET_STATUS[:success])
         else
-          Ticket.update_ticket(job["ticket"], TICKET_STATUS[:failed])
+          Ticket.aupdate_ticket(job["ticket"], TICKET_STATUS[:failed])
         end
       end
 
@@ -46,7 +46,7 @@ module Gearup
             }
 
             if job["ticket"]
-              Ticket.update_ticket(job["ticket"], TICKET_STATUS[:processing])
+              Ticket.aupdate_ticket(job["ticket"], TICKET_STATUS[:processing])
               Logger.log("Working on #{job["ticket"]}")
             end
             klass_obj.do_job(*job['args'])

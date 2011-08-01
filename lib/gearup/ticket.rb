@@ -1,8 +1,22 @@
 module Gearup
   module Ticket
     class << self
+      def aredis
+        @async_redis_client ||= EM::Protocols::Redis.connect :host => CONFIG.redis.host, :port => CONFIG.redis.port
+      end
+
       def redis
         @redis_client ||= ::Redis.connect :host => CONFIG.redis.host, :port => CONFIG.redis.port
+      end
+
+      def aget_status(ticket_num)
+        aredis.get(ticket_key(ticket_num)) do |val|
+          yield val
+        end
+      end
+
+      def aupdate_ticket(ticket_num, status)
+        aredis.set(ticket_key(ticket_num), status)
       end
 
       def incr_ticket_count

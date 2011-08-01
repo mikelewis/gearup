@@ -8,7 +8,7 @@ module Gearup
     end
 
     def connection_completed
-      connect :login => 'guest', :passcode => 'guest'
+      connect :login => CONFIG.queue.username, :passcode => CONFIG.queue.password
     end
 
     def receive_msg(msg)

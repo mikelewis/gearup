@@ -14,8 +14,15 @@ module Gearup
     end
 
     def finish_job(job, status = :success)
-      #log status maybe ?
-      send_object(:type=>'finished_job', :message_id=>job['message_id'])
+      if job["ticket"]
+        if status == :success
+          Ticket.update_ticket(job["ticket"], TICKET_STATUS[:success])
+        else
+          Ticket.update_ticket(job["ticket"], TICKET_STATUS[:failed])
+        end
+      end
+
+        send_object(:type=>'finished_job', :message_id=>job['message_id'])
     end
 
     def receive_object(job)
@@ -37,6 +44,11 @@ module Gearup
               puts "ERROR FOR #{result}"
               finish_job(job, :fail)
             }
+
+            if job["ticket"]
+              Ticket.update_ticket(job["ticket"], TICKET_STATUS[:processing])
+              Logger.log("Working on #{job["ticket"]}")
+            end
             klass_obj.do_job(*job['args'])
           end
         end

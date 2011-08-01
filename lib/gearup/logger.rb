@@ -1,19 +1,16 @@
 module Gearup
   module Logger
-    @logger = nil
-
-    def set_logger(logger)
-      @logger = logger
+    def logger
+      @@Logger ||= ::Logger.new(CONFIG.log_file)
     end
 
     def log(message, level = :debug)
-      fail "Need to call set_logger" unless @logger
-      @logger.add(sym_to_level(level)) {
+      logger.add(sym_to_level(level)) {
         message
       }
     end
 
-    module_function :set_logger, :log
+    module_function :log, :logger
 
     private
 

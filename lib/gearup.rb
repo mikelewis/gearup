@@ -1,5 +1,7 @@
 module Gearup
   require 'eventmachine'
+  #require 'em-redis'
+  require 'redis'
   require 'set'
   require 'json'
   require 'stomp'
@@ -15,6 +17,12 @@ module Gearup
   
   PID_DIR = File.join(GEARUP_DIR, 'tmp', 'pids')
 
+  TICKET_STATUS = {
+    :queued => "QUEUED",
+    :processing => "PROCESSING",
+    :failed => "FAILED",
+    :success => "SUCCESS"
+  }
 
   CONFIG = SimpleConf {
     queue {
@@ -22,6 +30,15 @@ module Gearup
       port 61613
       name "/queue/test"
       prefetch_size 100
+      username "guest"
+      password "guest"
+    }
+
+    redis {
+      host "localhost"
+      port 6379
+      database 0
+      namespace "gearup"
     }
 
     master_sock "/tmp/gearup.sock"
@@ -31,12 +48,13 @@ module Gearup
       port 10053
     }
 
-    log_file "log/gearup.log"
+    log_file "#{GEARUP_DIR}/log/gearup.log"
     job_dir "test_jobs"
     num_workers 1
+
+    ticket_ttl 3600
   }
 
-  Logger.set_logger(::Logger.new(CONFIG.log_file, 'daily'))
 
   autoload :Client, 'gearup/client'
   autoload :CommandCenter, 'gearup/command_center'
@@ -44,4 +62,5 @@ module Gearup
   autoload :Worker, 'gearup/worker'
   autoload :StompClient, 'gearup/stomp_client'
   autoload :BaseJob, 'gearup/base_job'
+  autoload :Ticket, 'gearup/ticket'
 end

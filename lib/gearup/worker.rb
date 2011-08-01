@@ -16,9 +16,9 @@ module Gearup
     def finish_job(job, status = :success)
       if job["ticket"]
         if status == :success
-          Ticket.aupdate_ticket(job["ticket"], TICKET_STATUS[:success])
+          Ticket.update_ticket(job["ticket"], TICKET_STATUS[:success])
         else
-          Ticket.aupdate_ticket(job["ticket"], TICKET_STATUS[:failed])
+          Ticket.update_ticket(job["ticket"], TICKET_STATUS[:failed])
         end
       end
 
@@ -35,6 +35,7 @@ module Gearup
 
           if klass
             klass_obj = klass.new
+            klass_obj.job = job
             klass_obj.callback {|result|
               puts "SUCCESS GOT #{result}"
               finish_job(job)
@@ -46,7 +47,7 @@ module Gearup
             }
 
             if job["ticket"]
-              Ticket.aupdate_ticket(job["ticket"], TICKET_STATUS[:processing])
+              Ticket.update_ticket(job["ticket"], TICKET_STATUS[:processing])
               Logger.log("Working on #{job["ticket"]}")
             end
             klass_obj.do_job(*job['args'])

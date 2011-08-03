@@ -11,7 +11,7 @@ opts = Trollop::options do
 Gearup Server
 
 Usage:
-       prependfile [options]
+       gearup start|stop|status [options]
 
 where [options] are:
   EOS
@@ -33,8 +33,8 @@ shutdown_proc = Proc.new do
 end
 
 opts[:workers].times do
-Daemons.run_proc('gearup', :dir => Gearup::PID_DIR, :dir_mode => :normal , :multiple =>true, :log_output => true, :stop_proc => shutdown_proc) do
-  Dir.chdir(Gearup::GEARUP_DIR)
-  Gearup::CommandCenter.start
-end
+  Daemons.run_proc('gearup', :dir => Gearup::PID_DIR, :dir_mode => :normal , :multiple =>true, :log_output => true, :stop_proc => shutdown_proc) do
+    Dir.chdir(Gearup::GEARUP_DIR)
+    Gearup::CommandCenter.start
+  end
 end

@@ -2,9 +2,9 @@
 .bundle
 Gemfile.lock
 pkg/*
-test_jobs/*
 enqueue.rb
-*.log
-tmp/pids/*
+test.log
+tmp/pids/test/*
 *.swp
 *.swo
+bin/gearup.log

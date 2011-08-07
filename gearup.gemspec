@@ -2,6 +2,7 @@
 $:.push File.expand_path("../lib", __FILE__)
 require "gearup/version"
 
+#TODO INCLUDE tmp dir
 Gem::Specification.new do |s|
   s.name        = "gearup"
   s.version     = Gearup::VERSION
@@ -14,7 +15,7 @@ Gem::Specification.new do |s|
 
   s.rubyforge_project = "gearup"
 
-  s.files         = `git ls-files`.split("\n")
+  s.files         = `git ls-files`.split("\n") + ['log', 'tmp', 'tmp/pids']
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = ["lib"]

@@ -6,3 +6,5 @@ test_jobs/*
 enqueue.rb
 *.log
 tmp/pids/*
+*.swp
+*.swo

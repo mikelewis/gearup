@@ -9,8 +9,8 @@ Gem::Specification.new do |s|
   s.authors     = ["Mike Lewis"]
   s.email       = ["ft.mikelewis@gmail.com"]
   s.homepage    = ""
-  s.summary     = %q{TODO: Write a gem summary}
-  s.description = %q{TODO: Write a gem description}
+  s.summary     = %q{EM Backed Generic Workers}
+  s.description = %q{EM Backed Generic Workers}
 
   s.rubyforge_project = "gearup"
 

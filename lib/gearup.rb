@@ -14,8 +14,6 @@ module Gearup
   require 'gearup/logger'
 
   GEARUP_DIR = File.expand_path(File.dirname(__FILE__) + "/..")
-  
-  PID_DIR = File.join(GEARUP_DIR, 'tmp', 'pids')
 
   TICKET_STATUS = {
     :queued => "QUEUED",
@@ -53,6 +51,8 @@ module Gearup
     num_workers 1
 
     ticket_ttl 3600
+
+    pid_dir File.join(GEARUP_DIR, 'tmp', 'pids')
   }
 
 

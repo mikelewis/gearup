@@ -17,8 +17,17 @@ where [options] are:
   EOS
 
   opt :config, "Configuration file", :type => String
+  opt :pids, "PID Directory used when stopping gearup", :type => String
   #TODO
   opt :workers, "Number of Master Consumers", :default => 1
+end
+
+stop_pid_dir = nil
+if ARGV[0] == "stop"
+  Trollop::die :pids, "must supply a pid dir when stopping" unless opts[:pids]
+  expanded_path = File.expand_path(opts[:pids])
+  Trollop::die :pids, "pid dir must exist" unless Dir.exist?(expanded_path)
+  stop_pid_dir = expanded_path
 end
 
 unless ["stop", "status"].include?(ARGV[0])
@@ -33,7 +42,7 @@ shutdown_proc = Proc.new do
 end
 
 opts[:workers].times do
-  Daemons.run_proc('gearup', :dir => Gearup::CONFIG.pid_dir, :dir_mode => :normal , :multiple =>true, :log_output => true, :stop_proc => shutdown_proc) do
+  Daemons.run_proc('gearup', :dir => stop_pid_dir || Gearup::CONFIG.pid_dir, :dir_mode => :normal , :multiple =>true, :log_output => true, :stop_proc => shutdown_proc) do
     Dir.chdir(Gearup::GEARUP_DIR)
     Gearup::CommandCenter.start
   end

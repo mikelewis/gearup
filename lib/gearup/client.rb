@@ -7,7 +7,7 @@ module Gearup
         define_method(meth) do |*args, &blk|
           ticket_num = Ticket.create_ticket
           job = {:type=>meth, :args=>args, :ticket => ticket_num}
-          @stomp_client.publish(@queue_name, JSON.dump(job))
+          @stomp_client.publish(@queue_name, job.to_json)
           ticket_num
         end
         module_function meth
